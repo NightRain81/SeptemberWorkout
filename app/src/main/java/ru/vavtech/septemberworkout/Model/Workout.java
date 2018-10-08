@@ -23,6 +23,7 @@ public class Workout {
         this.recordRepsCount = recordRepsCount;
         this.recordDate = recordDate;
         this.recordWeight = recordWeight;
+        this.imageUrl = imageUrl;
     }
 
     public String getFormattedRecordDate(){

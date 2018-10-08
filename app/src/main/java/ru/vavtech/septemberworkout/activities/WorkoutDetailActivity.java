@@ -1,14 +1,18 @@
 package ru.vavtech.septemberworkout.activities;
 
+import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import ru.vavtech.septemberworkout.Model.Workout;
 import ru.vavtech.septemberworkout.R;
@@ -31,7 +35,11 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_detail);
 
-        Workout workout = new Workout("Подтягивания", "Подтягивания на перекладине", 0, new Date(), 0);
+        recordRepsCount = (TextView) findViewById(R.id.workout_detail_record_reps_count);
+        repsCountEditText = (EditText) findViewById(R.id.workout_detail_reps_count_edit_text);
+        weightSeekBar = (SeekBar) findViewById(R.id.workout_detail_weight_seek_bar);
+
+        @SuppressLint("ResourceType") Workout workout = new Workout(getString(R.string.pull_ups), getString(R.string.info_pull_ups), 0, new Date(), 0);
         initGUI(workout);
         addListeners();
     }
@@ -53,6 +61,23 @@ public class WorkoutDetailActivity extends AppCompatActivity {
 
             }
         });
+
+        saveRecordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int rec = Integer.parseInt(recordRepsCount.getText().toString());
+                int rep = Integer.parseInt(repsCountEditText.getText().toString());
+                int weg = weightSeekBar.getProgress();
+
+                if(rep>rec) {
+                    recordDate.setText(new SimpleDateFormat("dd MMMM yyyy", Locale.ROOT).format(new Date()));
+                    recordRepsCount.setText(String.valueOf(rep));
+                    recordWeight.setText(String.valueOf(weg));
+                }
+
+            }
+        });
+
     }
 
     private void initGUI(Workout workout) {
@@ -66,7 +91,6 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         recordWeight.setText(String.valueOf(workout.getRecordWeight()));
         description = findViewById(R.id.workout_detail_description);
         description.setText(workout.getDescription());
-
         weight = findViewById(R.id.workout_detail_weight);
         weightSeekBar = findViewById(R.id.workout_detail_weight_seek_bar);
         repsCountEditText = findViewById(R.id.workout_detail_reps_count_edit_text);
